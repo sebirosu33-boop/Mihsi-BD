@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <title>Simulator CS:GO – Cadou Gaming Chair</title>
+  <title>Simulator CS – cadou gaming chair</title>
   <style>
     body {
       background: #0f1117;
@@ -11,11 +11,9 @@
       text-align: center;
       padding: 30px;
     }
-
     h1 {
       margin-bottom: 20px;
     }
-
     #roulette-container {
       margin: 30px auto;
       width: 720px;
@@ -25,13 +23,11 @@
       background: #1a202c;
       position: relative;
     }
-
     #roulette {
       display: flex;
       transition: transform 20s cubic-bezier(0.1, 0.8, 0.1, 1);
       transform: translateX(0);
     }
-
     .item {
       width: 120px;
       height: 100%;
@@ -39,7 +35,6 @@
       box-sizing: border-box;
       flex-shrink: 0;
     }
-
     .item img {
       width: 100%;
       height: 100%;
@@ -51,11 +46,9 @@
       box-shadow: 0 0 8px 2px rgba(250, 204, 21, 0.8);
       transition: box-shadow 0.3s ease;
     }
-
     .item img:hover {
       box-shadow: 0 0 15px 4px rgba(250, 204, 21, 1);
     }
-
     #pointer {
       width: 4px;
       height: 100%;
@@ -66,13 +59,11 @@
       transform: translateX(-50%);
       z-index: 10;
     }
-
     #winner {
       margin-top: 30px;
       font-size: 20px;
       min-height: 28px;
     }
-
     button {
       background: #2563eb;
       color: white;
@@ -83,7 +74,6 @@
       cursor: pointer;
       margin-top: 10px;
     }
-
     #finalImage {
       margin-top: 20px;
       max-width: 300px;
@@ -96,7 +86,7 @@
 </head>
 <body>
 
-  <h1>🎁 Deschide Cutia CS:GO</h1>
+  <h1>🎁 Deschide cutia CS</h1>
   <button onclick="startRoulette()">Deschide cutia</button>
 
   <div id="roulette-container">
@@ -109,21 +99,7 @@
 
   <script>
     const dummyImages = [
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...daa1ac27abd36939e6409494f5f4b520.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...db5e0a74a4e2030a7840519acea25976.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...3ae71f5935b567e09c56b5acd625a1cf.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...3dea1f9a4c12331c79afa53d68e2cf8d.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...66286698568f34224b86256f3790dbad.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...6b0cc67c682089b25322e0f86b81df6e.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...4b13f8e1392e05a2de5c127f46433b41.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...f2537d890d3a2b35a85e1bf090056a18.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...b45a556bc4ff7ee4f1938d056b28f6dc.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...2a04e097c32d3c621d7015833f5ebe35.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...80f0863c7964f75065263c265905e8ce.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...6c8ffe6fdf469db849b29a8dd4de84b1.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...1e377e8a462d76f924e4b0bc94f59763.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...a5a0121710d3cb0bc4896302a0e9dfc0.webp",
-      "https://cdn.csgoskins.gg/public/uih/items/aHR0c...82bec38a2aa11419b01fd0cf08b346a4.webp"
+    "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLpk8ewrHZk9___OPU5H_2cDWyZz-l0ufNtcCW6khUz_T-AnNagJH3FbwQnCsEmTeEMs0aww9biMby3tleKjtkQmSX-2yMfv311o7FVNa3OfdQ/512fx384f"
     ];
 
     const userImageURL = "https://topscaune.ro/continut/produse/188154/1000/scaun-gaming-cu-masaj-in-perna-lombara-sezut-benzi-elastice-sustinere-suport-picioare-material-textil-gri-negru_33640.webp";
@@ -157,7 +133,7 @@
       roulette.style.transform = "translateX(0)";
       roulette.offsetHeight;
 
-      roulette.style.transition = "transform 10s cubic-bezier(0.1, 0.8, 0.1, 1)";
+      roulette.style.transition = "transform 20s cubic-bezier(0.1, 0.8, 0.1, 1)";
       roulette.style.transform = `translateX(${offset}px)`;
 
       roulette.addEventListener('transitionend', onTransitionEnd);
