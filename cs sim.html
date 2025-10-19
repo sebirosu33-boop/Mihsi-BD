@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadou CS:GO – Gaming Chair Grey</title>
+  <style>
+    body {
+      background: #0f1117;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    #roulette-container {
+      margin: 30px auto;
+      width: 720px;
+      height: 120px;
+      overflow: hidden;
+      border: 4px solid #2d3748;
+      background: #1a202c;
+      position: relative;
+    }
+    #roulette {
+      display: flex;
+      transition: transform 20s cubic-bezier(0.1, 0.8, 0.1, 1);
+      transform: translateX(0);
+    }
+    .item {
+      width: 120px;
+      height: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+    .item img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 6px;
+      border: 3px solid #facc15;
+      background: #111;
+      box-sizing: border-box;
+      box-shadow: 0 0 8px 2px rgba(250, 204, 21, 0.8);
+      transition: box-shadow 0.3s ease;
+    }
+    .item img:hover {
+      box-shadow: 0 0 15px 4px rgba(250, 204, 21, 1);
+    }
+    #pointer {
+      width: 4px;
+      height: 100%;
+      background: #facc15;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+    #winner {
+      margin-top: 30px;
+      font-size: 20px;
+      min-height: 28px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #finalImage {
+      margin-top: 20px;
+      max-width: 300px;
+      display: none;
+      border-radius: 6px;
+      border: 3px solid #facc15;
+      box-shadow: 0 0 12px 3px rgba(250, 204, 21, 0.9);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Deschide cutia 🎁</h1>
+  <button onclick="startRoulette()">Deschide cutia</button>
+
+  <div id="roulette-container">
+    <div id="pointer"></div>
+    <div id="roulette"></div>
+  </div>
+
+  <div id="winner"></div>
+  <img id="finalImage" src="" alt="Cadoul câștigat" />
+
+  <audio id="caseSound" src="case_open.mp3"></audio>
+
+  <script>
+    const dummyImages = [
+      "https://wiki.cs.money/_next/static/images/ak-47-714163b7deae61b72d41d3b9c3cd8385.png",
+      "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf3qr3czxb49KzgL-KmsjxPr7Dl2dV18hwmOvN8IXvjVCLpxo7Oy3tIdLEdgdqNAmBqFa_kO3mh8K9uJqbyiMy7HIn5H3VzUPl1B0dO7M7hOveFwvYitsMFw",
+      "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot621FABz7PLfYQJK9diklb-HnvD8J4Tdl3lW7Ytw3LDD8NWnjFDhrUo5Nj_3cI6dIA9tZ1zQrFLqk7jugMK075WfznowpGB8suOz62BA",
+      "https://i.imgur.com/IpEsYSH.png",
+      "https://i.imgur.com/oV7FZrX.png",
+      "https://i.imgur.com/xzKjzDC.png",
+      "https://i.imgur.com/nkZ1V9G.png",
+      "https://i.imgur.com/B0SiozN.png",
+      "https://i.imgur.com/4Y9kLWy.png"
+    ];
+
+    const userImageURL = 'https://topscaune.ro/continut/produse/188154/1000/scaun-gaming-cu-masaj-in-perna-lombara-sezut-benzi-elastice-sustinere-suport-picioare-material-textil-gri-negru_33640.webp';
+
+    const roulette = document.getElementById("roulette");
+    const finalImage = document.getElementById("finalImage");
+    const winnerText = document.getElementById("winner");
+
+    function startRoulette() {
+      const sound = document.getElementById("caseSound");
+      sound.currentTime = 0;
+      sound.play();
+
+      winnerText.textContent = "";
+      finalImage.style.display = "none";
+
+      roulette.innerHTML = "";
+      const totalItems = 30;
+      const winningIndex = 24;
+
+      for (let i = 0; i < totalItems; i++) {
+        const div = document.createElement("div");
+        div.classList.add("item");
+
+        const img = document.createElement("img");
+        if (i === winningIndex) {
+          img.src = userImageURL;
+        } else {
+          img.src = dummyImages[Math.floor(Math.random() * dummyImages.length)];
+        }
+
+        div.appendChild(img);
+        roulette.appendChild(div);
+      }
+
+      const offset = -(winningIndex * 120) + 300;
+
+      // Resetăm tranziția și transformarea pentru a putea relua animația
+      roulette.style.transition = "none";
+      roulette.style.transform = "translateX(0)";
+      roulette.offsetHeight; // forțăm reflow
+
+      // Setăm tranziția de 20 secunde
+      roulette.style.transition = "transform 10s cubic-bezier(0.1, 0.8, 0.1, 1)";
+      roulette.style.transform = `translateX(${offset}px)`;
+
+      // Adăugăm listener pentru finalul animației
+      roulette.addEventListener('transitionend', onTransitionEnd);
+
+      function onTransitionEnd() {
+        winnerText.textContent = "🎉 Felicitări! Ai primit: Gaming Chair Grey";
+        finalImage.src = userImageURL;
+        finalImage.style.display = "inline-block";
+
+        roulette.removeEventListener('transitionend', onTransitionEnd);
+      }
+    }
+  </script>
+</body>
+</html>
