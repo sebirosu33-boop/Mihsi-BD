@@ -97,19 +97,11 @@
   <div id="winner"></div>
   <img id="finalImage" src="" alt="Cadoul câștigat" />
 
-  <!-- AUDIO PLAYER ascuns (nu arată controale) -->
-  <audio id="caseSound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  <!-- ✅ AUDIO PLAYER (vizibil temporar pt test) -->
+  <audio id="caseSound" src="csgo-drop-sound.mp3" controls></audio>
 
   <script>
-    // Array cu imagini dummy (exemplu, înlocuiește cu ce vrei)
-    const dummyImages = [
-      "https://i.ibb.co/7R4mrF1/image1.png",
-      "https://i.ibb.co/dW9YsMZ/image2.png",
-      "https://i.ibb.co/b6yQXcs/image3.png",
-      "https://i.ibb.co/kM9QJ6Z/image4.png",
-      "https://i.ibb.co/ZV6zqMR/image5.png"
-    ];
-
+    const dummyImages = [/* aici păstrezi array-ul tău de imagini */];
     const userImageURL = "https://i.ibb.co/C3S6tTj9/scaun-gaming-cu-masaj-in-perna-lombara-sezut-benzi-elastice-sustinere-suport-picioare-material-texti.png";
     const roulette = document.getElementById("roulette");
     const finalImage = document.getElementById("finalImage");
@@ -119,9 +111,9 @@
       const sound = document.getElementById("caseSound");
       sound.currentTime = 0;
 
+      // ✅ Prindem eventualele erori de redare
       sound.play().catch(err => {
         console.error("Eroare la redarea sunetului:", err);
-        alert("Nu s-a putut reda sunetul. Verifică consola pentru detalii.");
       });
 
       winnerText.textContent = "";
@@ -129,40 +121,34 @@
       roulette.innerHTML = "";
 
       const totalItems = 30;
-      const winningIndex = 24; // poziția câștigătoare în lista
+      const winningIndex = 24;
 
       for (let i = 0; i < totalItems; i++) {
         const div = document.createElement("div");
         div.classList.add("item");
 
         const img = document.createElement("img");
-        // Dacă e poziția câștigătoare, pune imaginea userului, altfel imagine random
         img.src = (i === winningIndex) ? userImageURL : dummyImages[Math.floor(Math.random() * dummyImages.length)];
 
         div.appendChild(img);
         roulette.appendChild(div);
       }
 
-      // Calculăm offsetul pentru a poziționa câștigătorul fix sub pointer
       const offset = -(winningIndex * 120) + 300;
 
-      // Resetăm transform și forțăm reflow pentru tranzitie
       roulette.style.transition = "none";
       roulette.style.transform = "translateX(0)";
-      roulette.offsetHeight; // forțare reflow
+      roulette.offsetHeight; // force reflow
 
-      // Setăm tranziția și mutăm roata
       roulette.style.transition = "transform 10s cubic-bezier(0.1, 0.8, 0.1, 1)";
       roulette.style.transform = `translateX(${offset}px)`;
 
-      // Când se termină animația, afișăm mesajul și poza câștigătoare
       roulette.addEventListener('transitionend', onTransitionEnd);
 
       function onTransitionEnd() {
         winnerText.innerHTML = "🎉 <strong>Congrats!</strong> Ai câștigat: <strong>Gaming Chair | Grey</strong><br>E timpul să-ți revendici tronul — noul tău scaun de gaming este în drum spre tine!";
         finalImage.src = userImageURL;
         finalImage.style.display = "inline-block";
-
         roulette.removeEventListener('transitionend', onTransitionEnd);
       }
     }
