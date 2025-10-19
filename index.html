@@ -2,149 +2,135 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <title>Simulator CS – cadou gaming chair</title>
+  <title>CS:GO Case Opening</title>
   <style>
     body {
-      background: #0f1117;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 30px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    #roulette-container {
-      margin: 30px auto;
-      width: 720px;
-      height: 120px;
-      overflow: hidden;
-      border: 4px solid #2d3748;
-      background: #1a202c;
-      position: relative;
-    }
-    #roulette {
-      display: flex;
-      transition: transform 20s cubic-bezier(0.1, 0.8, 0.1, 1);
-      transform: translateX(0);
-    }
-    .item {
-      width: 120px;
-      height: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-      flex-shrink: 0;
-    }
-    .item img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      border-radius: 6px;
-      border: 3px solid #facc15;
       background: #111;
-      box-sizing: border-box;
-      box-shadow: 0 0 8px 2px rgba(250, 204, 21, 0.8);
-      transition: box-shadow 0.3s ease;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: #fff;
+      padding-top: 50px;
     }
-    .item img:hover {
-      box-shadow: 0 0 15px 4px rgba(250, 204, 21, 1);
+
+    .case-container {
+      width: 100%;
+      overflow: hidden;
+      border: 4px solid #555;
+      margin: 0 auto 20px;
+      background: #1e1e1e;
     }
-    #pointer {
-      width: 4px;
-      height: 100%;
-      background: #facc15;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
+
+    .item-strip {
+      display: flex;
+      transition: transform 20s cubic-bezier(0.25, 1, 0.5, 1);
     }
-    #winner {
+
+    .item {
+      border: 2px solid #444;
+      margin: 5px;
+      padding: 5px;
+      width: 128px;
+      height: 96px;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .item img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .open-btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .result {
       margin-top: 30px;
       font-size: 20px;
-      min-height: 28px;
-    }
-    button {
-      background: #2563eb;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    #finalImage {
-      margin-top: 20px;
-      max-width: 300px;
-      display: none;
-      border-radius: 6px;
-      border: 3px solid #facc15;
-      box-shadow: 0 0 12px 3px rgba(250, 204, 21, 0.9);
+      color: #0f0;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎁 Deschide cutia CS</h1>
-  <button onclick="startRoulette()">Deschide cutia</button>
-
-  <div id="roulette-container">
-    <div id="pointer"></div>
-    <div id="roulette"></div>
+  <h1>Deschide o Cutie CS:GO 🎁</h1>
+  <div class="case-container" id="case">
+    <div class="item-strip" id="strip">
+      <!-- Imaginile vor fi injectate aici din JS -->
+    </div>
   </div>
+  <button class="open-btn" onclick="startAnimation()">Deschide Cutia</button>
 
-  <div id="winner"></div>
-  <img id="finalImage" src="" alt="Cadoul câștigat" />
+  <div class="result" id="result"></div>
 
   <script>
-    const dummyImages = [
-    "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLpk8ewrHZk9___OPU5H_2cDWyZz-l0ufNtcCW6khUz_T-AnNagJH3FbwQnCsEmTeEMs0aww9biMby3tleKjtkQmSX-2yMfv311o7FVNa3OfdQ/512fx384f"
+    const items = [
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_DVL0OK8Yap5M-SBC2ad_uJ_t-l9AX_qlk4k5GyAzo6ocC-QZgZxX8AjEbZY5xnrxtPjM7vnsgGIj9oTmXngznQeg3pfcPs/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL3n5vh7h1d7v-ve5tvIfSHHG6A_uJ_t-l9AX6xzExytWndzdj6eCrGb1MkWZB2TOBc4xK8mtHkZezrsQOPjoITyi_gznQezHhrR0c/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwlcK3wiNQu6WRbbx9LP-AB3GV_uJ_t-l9AXu2lk1xsD-EnI3_JHmeaAV1CZB1RbEJtxfuxNHuMuq251PY3o4UxXjgznQeg4Qz-rg/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLkk4a0qB1O4uL6PZtiLPSsDWaC1eF5vt5lRi67gVN2tWXTzI6tc3rGPQ4kWJUiQrJf4RPskIW2ZO3r4VaKi9hFyX-qhy0a8G81tA_18T9p/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL1m5fn8Sdk6_evb6hoH-OdD2yV_v53pPVsXSeMmRQguynLzdmsIHOVPVciXMN3QuVeuxexmtHuP77m7gDd34kRxXj_3ChKvS9p5fFCD_SJMmxOXA/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL_kYDhwixU-fOReq1-Kf6UMXSFz9F6ueZhW2eyzB9z4WjTzt77JXKVaQcnC5sjTLEMthDpwdzkMr_lsVbW34lGmyj5kGoXuV-iSbwM/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLhx8bf7XsL0PChZ7d5H_KfG2KvzedxuPUnTHrlzU9xt2qHzd-rJ3yQb1cmXJNzF-Vc5BS6wdLjMe60tAyP3dhNzTK-0H3NvEQllg/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL2n5rp8SNJ0PWvZK1hH_OcAHOCzuJJo_V7RiK2qhEutDWR1Nmvcn6RPFVxW5txTbRZuxDuxNKzZu2x7wCMiNpExCSshyof7Xlt5-scEf1y6paUA5M/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLln4Xl7x1B6ue9V7BiM_GaMWuZxuZi_uM6GXC3xUh05D7WmY36IHuUZ1AjXpVwR-FZu0OxltHlN-_gsQ3Z34NbjXKpEIQyv90/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLkjYbf7itX6vytbbZSNeODHViS0_titedmXSq2qho1tjiLpYPwJiPTcFcoCpV2F-Nc4xXpwNPhZeLg5AffiIxNynj2jylP53xp6ugHU6Ig__XJz1aWMWkGKhU/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLkjYbf7itX6vytbbZSNeODHViS0_titedmXSq2qho1tjiLpYPwJiPTcFcoCpV2F-Nc4xXpwNPhZeLg5AffiIxNynj2jylP53xp6ugHU6Ig__XJz1aWMWkGKhU/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL8ypexwi8P7qaRb7ZoJf6sDWadztF6ueZhW2fjl05-6mzVmdmgcHOTZgIhXpJ1RO5c4Bjql9DjMunhsgOL34gUnnr-kGoXuTonsfJ3/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLijZGwpR1I_PX-MJtvMuWHD2uZ0vpJvOhuRz39x0UlsWmEnt37IHyfaFAkWZR5RuALtRKxlYKxMLnn4leL3t5FmSv9ijQJsHj6GwByAQ/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL8js_f8DIC0PyrcLF-H_yaCW-Ej7ohs7Q5FnDqx0t152XdzI36cCnDaAZyDJNzRuVYsBa4kYHgZbyx4ALAy9USEWUfUe0/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLpk8ewrHZk9___OPU5H_2cDWyZz-l0ufNtcCW6khUz_T-AnNagJH3FbwQnCsEmTeEMs0aww9biMby3tleKjtkQmSX-2yMfv311o7FVNa3OfdQ/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL5lYayrXIL0OL8Y5trMvGQGmac_uJ_t-l9AS2wwxx06mTUw9b7JH2RZlQoDZYkRLQD5hW4lNPiYePktgzWj45CmSzgznQeV1pFuQ0/512fx384f",
+"https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL8n5G3wi9a6KWRaalgL8-RAX-vzedxuPUnTHjgkxwj52SHyImqcX2fO1AhDMNxEe4I4RWwkIXgMO60sQPeiYgQmTK-0H2GsAjMqQ/512fx384f"
+
+      
     ];
 
-    const userImageURL = "https://topscaune.ro/continut/produse/188154/1000/scaun-gaming-cu-masaj-in-perna-lombara-sezut-benzi-elastice-sustinere-suport-picioare-material-textil-gri-negru_33640.webp";
+    const winnerImage = "https://i.imgur.com/sOYyK7j.png";
+    const winnerName = "Gaming Chair Grey";
 
-    const roulette = document.getElementById("roulette");
-    const finalImage = document.getElementById("finalImage");
-    const winnerText = document.getElementById("winner");
+    // Creăm lista cu iteme
+    const strip = document.getElementById("strip");
+    let fullList = [];
 
-    function startRoulette() {
-      winnerText.textContent = "";
-      finalImage.style.display = "none";
+    // Generăm 50 de iteme random + câștigătorul la final
+    for (let i = 0; i < 50; i++) {
+      const img = items[Math.floor(Math.random() * items.length)];
+      fullList.push(img);
+    }
 
-      roulette.innerHTML = "";
-      const totalItems = 30;
-      const winningIndex = 24;
+    // Adăugăm imaginea câștigătoare la final
+    fullList.push(winnerImage);
 
-      for (let i = 0; i < totalItems; i++) {
-        const div = document.createElement("div");
-        div.classList.add("item");
+    // Injectăm în HTML
+    strip.innerHTML = fullList.map(url => `
+      <div class="item"><img src="${url}" /></div>
+    `).join("");
 
-        const img = document.createElement("img");
-        img.src = (i === winningIndex) ? userImageURL : dummyImages[Math.floor(Math.random() * dummyImages.length)];
+    function startAnimation() {
+      const totalWidth = strip.scrollWidth;
+      const winnerIndex = fullList.length - 1;
+      const itemWidth = strip.firstElementChild.offsetWidth + 10; // chenar + margine
+      const scrollTo = (winnerIndex * itemWidth) - (window.innerWidth / 2) + (itemWidth / 2);
 
-        div.appendChild(img);
-        roulette.appendChild(div);
-      }
+      strip.style.transition = "transform 20s cubic-bezier(0.25, 1, 0.5, 1)";
+      strip.style.transform = `translateX(-${scrollTo}px)`;
 
-      const offset = -(winningIndex * 120) + 300;
-
-      roulette.style.transition = "none";
-      roulette.style.transform = "translateX(0)";
-      roulette.offsetHeight;
-
-      roulette.style.transition = "transform 20s cubic-bezier(0.1, 0.8, 0.1, 1)";
-      roulette.style.transform = `translateX(${offset}px)`;
-
-      roulette.addEventListener('transitionend', onTransitionEnd);
-
-      function onTransitionEnd() {
-        winnerText.textContent = "🎉 Felicitări! Ai primit: Gaming Chair Grey";
-        finalImage.src = userImageURL;
-        finalImage.style.display = "inline-block";
-        roulette.removeEventListener('transitionend', onTransitionEnd);
-      }
+      // Afișăm rezultatul după 20s
+      document.getElementById("result").innerHTML = "";
+      setTimeout(() => {
+        document.getElementById("result").innerHTML = `🎉 Ai câștigat: <strong>${winnerName}</strong>!`;
+      }, 20000);
     }
   </script>
+
 </body>
 </html>
