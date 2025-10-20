@@ -2,106 +2,161 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Happy Birthday Case</title>
   <style>
-    body {
-      background: #0f1117;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+    :root{
+      --bg: #0f1117;
+      --panel: #1a202c;
+      --accent: #2563eb;
+      --yellow: #facc15;
+      --text: #ffffff;
+      --container-max: 900px;
+      --item-size: 160px;
+      --item-gap: 12px;
+      --border-width: 2px;
+    }
+
+    @media (max-width: 420px) {
+      :root{ --item-size: 140px; --container-max: 420px; }
+    }
+    @media (max-width: 360px) {
+      :root{ --item-size: 120px; --container-max: 360px; }
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap {
+      max-width: var(--container-max);
+      margin: 18px auto;
+      padding: 18px;
       text-align: center;
-      padding: 30px;
     }
-    h1 {
-      margin-bottom: 20px;
+
+    h1 { margin: 8px 0 12px 0; font-size: 20px; }
+
+    button#openBtn {
+      background: var(--accent);
+      color: white;
+      padding: 12px 18px;
+      border: none;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
     }
+    button#openBtn[disabled]{ opacity: 0.5; cursor: default; }
+
     #roulette-container {
-      margin: 30px auto;
-      width: 720px;
-      height: 120px;
-      overflow: hidden;
-      border: 4px solid #2d3748;
-      background: #1a202c;
-      position: relative;
-    }
-    #roulette {
-      display: flex;
-      transition: transform 20s cubic-bezier(0.1, 0.8, 0.1, 1);
-      transform: translateX(0);
-    }
-    .item {
-      width: 120px;
-      height: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-      flex-shrink: 0;
-    }
-    .item img {
+      margin: 0 auto;
       width: 100%;
-      height: 100%;
-      object-fit: contain;
-      border-radius: 6px;
-      border: 3px solid #facc15;
-      background: #111;
+      max-width: calc(var(--item-size) * 4 + 4 * var(--item-gap) + 40px);
+      height: calc(var(--item-size) + 20px);
+      overflow: hidden;
+      border: 2px solid #2d3748;
+      background: var(--panel);
+      position: relative;
+      border-radius: 10px;
+      padding: 8px;
       box-sizing: border-box;
-      box-shadow: 0 0 8px 2px rgba(250, 204, 21, 0.8);
-      transition: box-shadow 0.3s ease;
     }
-    .item img:hover {
-      box-shadow: 0 0 15px 4px rgba(250, 204, 21, 1);
-    }
+
     #pointer {
       width: 4px;
       height: 100%;
-      background: #facc15;
+      background: var(--yellow);
       position: absolute;
       top: 0;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 10;
+      z-index: 20;
+      border-radius: 2px;
+      box-shadow: 0 0 8px rgba(250,204,21,0.85);
     }
-    #winner {
-      margin-top: 30px;
-      font-size: 20px;
-      min-height: 28px;
+
+    #roulette {
+      display: flex;
+      gap: var(--item-gap);
+      align-items: center;
+      transition: transform 7s cubic-bezier(0.1, 0.8, 0.1, 1);
+      will-change: transform;
+      padding: 6px 0;
     }
-    button {
-      background: #2563eb;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      font-size: 16px;
+
+    .item {
+      width: var(--item-size);
+      height: var(--item-size);
+      box-sizing: border-box;
+      flex-shrink: 0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: var(--border-width) solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .consumer  { background: #4b5563; border-color: #6b7280; }
+    .industrial{ background: #60a5fa; border-color: #93c5fd; }
+    .milspec   { background: #1e3a8a; border-color: #3b82f6; }
+    .restricted{ background: #6d28d9; border-color: #a78bfa; }
+    .classified{ background: #be185d; border-color: #ec4899; }
+    .covert    { background: #dc2626; border-color: #f87171; }
+    .winner-box{ background: var(--yellow); border-color: var(--yellow); }
+
+    .item img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
       border-radius: 6px;
-      cursor: pointer;
-      margin-top: 10px;
+      background: transparent;
     }
+
+    #winner { margin-top: 14px; font-size: 16px; min-height: 22px; }
     #finalImage {
-      margin-top: 20px;
-      max-width: 300px;
+      margin-top: 12px;
+      max-width: 320px;
+      width: 80%;
+      border-radius: 8px;
       display: none;
-      border-radius: 6px;
-      border: 3px solid #facc15;
-      box-shadow: 0 0 12px 3px rgba(250, 204, 21, 0.9);
+      border: 2px solid var(--yellow);
+      box-shadow: 0 6px 20px rgba(250,204,21,0.85);
     }
+
+    .small-muted { color: #aab0bd; font-size: 13px; margin-top:6px; }
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Happy Birthday Case 🎁</h1>
+    <button id="openBtn" onclick="startRoulette()">Open Case</button>
+   
+    <div id="roulette-container" aria-hidden="false">
+      <div id="pointer" aria-hidden="true"></div>
+      <div id="roulette" role="list"></div>
+    </div>
 
-  <h1>Happy Birthday Case 🎁</h1>
-  <button onclick="startRoulette()">Open Case</button>
-
-  <div id="roulette-container">
-    <div id="pointer"></div>
-    <div id="roulette"></div>
+    <div id="winner" aria-live="polite"></div>
+    <img id="finalImage" src="" alt="Cadoul câștigat" />
   </div>
 
-  <div id="winner"></div>
-  <img id="finalImage" src="" alt="Cadoul câștigat" />
-
-  <audio id="caseSound" src="csgo-drop-sound.mp3"></audio>
+  <audio id="caseSound" src="csgo-drop-sound.mp3" preload="auto"></audio>
 
   <script>
     const dummyImages = [
-      "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_DVL0OK8Yap5M-SBC2ad_uJ_t-l9AX_qlk4k5GyAzo6ocC-QZgZxX8AjEbZY5xnrxtPjM7vnsgGIj9oTmXngznQeg3pfcPs/512fx384f",
+         "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_DVL0OK8Yap5M-SBC2ad_uJ_t-l9AX_qlk4k5GyAzo6ocC-QZgZxX8AjEbZY5xnrxtPjM7vnsgGIj9oTmXngznQeg3pfcPs/512fx384f",
 "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL3n5vh7h1d7v-ve5tvIfSHHG6A_uJ_t-l9AX6xzExytWndzdj6eCrGb1MkWZB2TOBc4xK8mtHkZezrsQOPjoITyi_gznQezHhrR0c/512fx384f",
 "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwlcK3wiNQu6WRbbx9LP-AB3GV_uJ_t-l9AXu2lk1xsD-EnI3_JHmeaAV1CZB1RbEJtxfuxNHuMuq251PY3o4UxXjgznQeg4Qz-rg/512fx384f",
 "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLkk4a0qB1O4uL6PZtiLPSsDWaC1eF5vt5lRi67gVN2tWXTzI6tc3rGPQ4kWJUiQrJf4RPskIW2ZO3r4VaKi9hFyX-qhy0a8G81tA_18T9p/512fx384f",
@@ -119,7 +174,6 @@
 "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL5lYayrXIL0OL8Y5trMvGQGmac_uJ_t-l9AS2wwxx06mTUw9b7JH2RZlQoDZYkRLQD5hW4lNPiYePktgzWj45CmSzgznQeV1pFuQ0/512fx384f",
 "https://steamcommunity-a.akamaihd.net/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL8n5G3wi9a6KWRaalgL8-RAX-vzedxuPUnTHjgkxwj52SHyImqcX2fO1AhDMNxEe4I4RWwkIXgMO60sQPeiYgQmTK-0H2GsAjMqQ/512fx384f"
 
-
     ];
 
     const userImageURL = "https://i.ibb.co/C3S6tTj9/scaun-gaming-cu-masaj-in-perna-lombara-sezut-benzi-elastice-sustinere-suport-picioare-material-texti.png";
@@ -127,59 +181,69 @@
     const roulette = document.getElementById("roulette");
     const finalImage = document.getElementById("finalImage");
     const winnerText = document.getElementById("winner");
+    const openBtn = document.getElementById("openBtn");
+    const sound = document.getElementById("caseSound");
 
-    function startRoulette() {
-      const sound = document.getElementById("caseSound");
-      sound.currentTime = 0;
-      sound.play();
+    const rarities = ["consumer", "industrial", "milspec", "restricted", "classified", "covert"];
+    const TOTAL_ITEMS = 30;
+    const WIN_INDEX = 24;
+
+    function getItemWidth(){
+      const root = getComputedStyle(document.documentElement);
+      return parseFloat(root.getPropertyValue('--item-size').trim());
+    }
+
+    function startRoulette(){
+      openBtn.disabled = true;
+      try{ sound.currentTime=0; sound.play(); }catch(e){}
 
       winnerText.textContent = "";
       finalImage.style.display = "none";
-
       roulette.innerHTML = "";
-      const totalItems = 30;
-      const winningIndex = 24;
 
-      for (let i = 0; i < totalItems; i++) {
+      for(let i=0;i<TOTAL_ITEMS;i++){
         const div = document.createElement("div");
         div.classList.add("item");
-
         const img = document.createElement("img");
-        if (i === winningIndex) {
+
+        if(i===WIN_INDEX){
+          div.classList.add("winner-box");
           img.src = userImageURL;
+          img.alt = "Câștigător";
         } else {
-          img.src = dummyImages[Math.floor(Math.random() * dummyImages.length)];
+          const rarity = rarities[Math.floor(Math.random()*rarities.length)];
+          div.classList.add(rarity);
+          img.src = dummyImages[Math.floor(Math.random()*dummyImages.length)];
+          img.alt = "Item";
         }
 
         div.appendChild(img);
         roulette.appendChild(div);
       }
 
-      const offset = -(winningIndex * 120) + 300;
+      const itemW = getItemWidth() + parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--item-gap')||12);
+      const container = document.getElementById("roulette-container");
+      const containerMid = container.getBoundingClientRect().width/2;
+      const offset = -(WIN_INDEX*itemW) + containerMid - (itemW/2);
 
-      // Resetăm tranziția și transformarea pentru a putea relua animația
       roulette.style.transition = "none";
-      roulette.style.transform = "translateX(0)";
-      roulette.offsetHeight; // forțăm reflow
+      roulette.style.transform = "translateX(0px)";
+      void roulette.offsetWidth;
 
-      // Setăm tranziția de 7 secunde
-      roulette.style.transition = "transform 7s cubic-bezier(0.1, 0.8, 0.1, 1)";
+      roulette.style.transition = "transform 7s cubic-bezier(0.1,0.8,0.1,1)";
       roulette.style.transform = `translateX(${offset}px)`;
 
-      // Adăugăm listener pentru finalul animației
-      roulette.addEventListener('transitionend', onTransitionEnd);
-
-      function onTransitionEnd() {
-      
-winnerText.innerHTML = "Congrats! Ai câștigat: <strong>Gaming Chair | Grey</strong><br>E timpul să-ți revendici tronul — noul tău scaun de gaming este în drum spre tine!";
-
-
+      function onEnd(){
+        winnerText.innerHTML = "🎉 Ai câștigat: <strong>Gaming Chair | Grey</strong><br>Noul tău scaun este în drum spre tine!";
         finalImage.src = userImageURL;
         finalImage.style.display = "inline-block";
-
-        roulette.removeEventListener('transitionend', onTransitionEnd);
+        setTimeout(()=> openBtn.disabled=false,800);
+        roulette.removeEventListener('transitionend',onEnd);
       }
+      roulette.addEventListener('transitionend',onEnd);
     }
+
+    openBtn.addEventListener('keydown',(e)=>{if(openBtn.disabled)e.preventDefault();});
   </script>
 </body>
 </html>
