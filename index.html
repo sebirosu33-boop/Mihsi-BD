@@ -71,18 +71,7 @@
       box-sizing: border-box;
     }
 
-    #pointer {
-      width: 4px;
-      height: 100%;
-      background: var(--yellow);
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 20;
-      border-radius: 2px;
-      box-shadow: 0 0 8px rgba(250,204,21,0.85);
-    }
+
 
     #roulette {
       display: flex;
@@ -103,7 +92,18 @@
       align-items: center;
       justify-content: center;
       border: var(--border-width) solid transparent;
-      position: relative;
+      posi#pointer {
+  width: 4px;
+  height: 100%;
+  background: #ffffff; /* linie albă */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  border-radius: 2px;
+  box-shadow: 0 0 8px #000000; /* glow negru */
+      }tion: relative;
       overflow: hidden;
     }
 
